@@ -1,0 +1,54 @@
+CREATE TABLE IF NOT EXISTS genres(
+	genre_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	name_genre VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS artists (
+	artist_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	name_artist VARCHAR(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS artists_genres(
+	artist_genre_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	genre_id INT, 
+	artist_id INT, 
+	FOREIGN KEY (genre_id)  REFERENCES genres (genre_id) ON DELETE SET NULL,
+	FOREIGN KEY (artist_id) REFERENCES artists (artist_id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS albums (
+	album_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	name_album VARCHAR(100) NOT NULL,
+	release_year DATE
+);
+
+CREATE TABLE IF NOT EXISTS artists_albums (
+	artist_album_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	artist_id INT, 
+	album_id INT, 
+	FOREIGN KEY (artist_id) REFERENCES artists (artist_id) ON DELETE SET NULL,
+	FOREIGN KEY (album_id) REFERENCES albums (album_id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS digests (
+	digest_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	name_digest VARCHAR(100) NOT NULL,
+	release_year DATE
+);
+
+CREATE TABLE IF NOT EXISTS compositions (
+	compositions_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	name_composition VARCHAR(100) NOT NULL,
+	duration DECIMAL(4, 2),
+	album_id INT, 
+	FOREIGN KEY (album_id) REFERENCES albums (album_id) ON DELETE SET NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS compositions_digests (
+	composition_digest_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	composition_id INTEGER, 
+	digest_id INT, 
+	FOREIGN KEY (composition_id) REFERENCES compositions (composition_id) ON DELETE SET NULL,
+	FOREIGN KEY (digest_id) REFERENCES digests (digest_id) ON DELETE SET NULL
+);
