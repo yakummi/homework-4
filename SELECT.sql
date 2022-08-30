@@ -22,7 +22,7 @@ GROUP BY name_album;
 
 --все исполнители, которые не выпустили альбомы в 2020 году;
 
-SELECT name_artist
+SELECT DISTINCT name_artist
 FROM artists 
 	JOIN artists_albums USING(artist_id)
 	JOIN albums USING(album_id)
@@ -34,7 +34,7 @@ GROUP BY name_artist;
 
 --названия сборников, в которых присутствует конкретный исполнитель (выберите сами);
 
-SELECT name_digest, name_artist
+SELECT DISTINCT (name_digest, name_artist)
 FROM digests 
 	JOIN compositions_digests USING(digest_id)
 	JOIN compositions USING(composition_id)
@@ -57,7 +57,7 @@ HAVING COUNT(name_genre) > 1;
 
 --наименование треков, которые не входят в сборники;
 
-SELECT name_composition
+SELECT DISTINCT name_composition
 FROM compositions 
 	JOIN compositions_digests USING(composition_id)
 WHERE compositions_digests.digest_id is Null
@@ -65,7 +65,7 @@ GROUP BY name_composition;
 
 --исполнителя(-ей), написавшего самый короткий по продолжительности трек (теоретически таких треков может быть несколько);
 
-SELECT name_artist, duration
+SELECT DISTINCT (name_artist, duration)
 FROM artists 
 	INNER JOIN artists_albums USING(artist_id)
 	INNER JOIN albums USING(album_id)
