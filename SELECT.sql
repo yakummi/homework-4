@@ -22,15 +22,13 @@ GROUP BY name_album;
 
 --все исполнители, которые не выпустили альбомы в 2020 году;
 
-SELECT DISTINCT name_artist
+SELECT name_artist
 FROM artists 
-	JOIN artists_albums USING(artist_id)
-	JOIN albums USING(album_id)
-WHERE artist_id  NOT IN (SELECT artist_id
-							  FROM artists_albums
-							  		INNER JOIN albums USING(album_id)
-							  WHERE TO_CHAR(albums.release_year, 'YYYY') LIKE '%2020%')
-GROUP BY name_artist;
+JOIN artists_albums USING(artist_id)
+JOIN albums AS a USING(album_id)
+WHERE artist_id  NOT IN (SELECT artist_id FROM artists_albums
+INNER JOIN albums USING(album_id)
+WHERE TO_CHAR(albums.release_year, 'YYYY') LIKE '%2020%');
 
 --названия сборников, в которых присутствует конкретный исполнитель (выберите сами);
 
@@ -42,7 +40,7 @@ FROM digests
 	JOIN artists_albums USING(album_id)
 	JOIN artists USING(artist_id)
 WHERE name_artist LIKE 'Noize%'
-GROUP BY name_digest, name_artist;
+
 
 --название альбомов, в которых присутствуют исполнители более 1 жанра;
 	
@@ -61,7 +59,7 @@ SELECT DISTINCT name_composition
 FROM compositions 
 	JOIN compositions_digests USING(composition_id)
 WHERE compositions_digests.digest_id is Null
-GROUP BY name_composition;
+
 
 --исполнителя(-ей), написавшего самый короткий по продолжительности трек (теоретически таких треков может быть несколько);
 
@@ -72,7 +70,6 @@ FROM artists
 	INNER JOIN compositions USING(album_id)
 WHERE duration = (SELECT MIN(duration)
 				  FROM compositions)
-GROUP BY name_artist, duration;
 
 --название альбомов, содержащих наименьшее количество треков.
 
